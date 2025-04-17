@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import json
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree
 
 
 class Book:
@@ -57,20 +57,29 @@ class JsonSerializer(BookSerializer):
 
 class XmlSerializer(BookSerializer):
     def serialize(self, book: Book) -> str:
-        root = ET.Element("book")
-        title = ET.SubElement(root, "title")
+        root = xml.etree.ElementTree.Element("book")
+        title = xml.etree.ElementTree.SubElement(root, "title")
         title.text = book.title
-        content = ET.SubElement(root, "content")
+        content = xml.etree.ElementTree.SubElement(root, "content")
         content.text = book.content
-        return ET.tostring(root, encoding="unicode")
+        return xml.etree.ElementTree.tostring(root, encoding="unicode")
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> str | None:
-    display_strategies = {"console": ConsoleDisplayer(), "reverse": ReverseDisplayer()}
+    display_strategies = {
+        "console": ConsoleDisplayer(),
+        "reverse": ReverseDisplayer(),
+    }
 
-    print_strategies = {"console": ConsolePrinter(), "reverse": ReversePrinter()}
+    print_strategies = {
+        "console": ConsolePrinter(),
+        "reverse": ReversePrinter(),
+    }
 
-    serializer_strategies = {"json": JsonSerializer(), "xml": XmlSerializer()}
+    serializer_strategies = {
+        "json": JsonSerializer(),
+        "xml": XmlSerializer(),
+    }
 
     for cmd, method_type in commands:
         if cmd == "display":
@@ -91,6 +100,7 @@ def main(book: Book, commands: list[tuple[str, str]]) -> str | None:
                 return serializer.serialize(book)
             else:
                 raise ValueError(f"Unknown serialize type: {method_type}")
+    return None
 
 
 if __name__ == "__main__":
