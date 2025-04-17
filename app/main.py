@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 
 
 class Book:
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         self.title = title
         self.content = content
 
@@ -66,20 +66,11 @@ class XmlSerializer(BookSerializer):
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> str | None:
-    display_strategies = {
-        "console": ConsoleDisplayer(),
-        "reverse": ReverseDisplayer()
-    }
+    display_strategies = {"console": ConsoleDisplayer(), "reverse": ReverseDisplayer()}
 
-    print_strategies = {
-        "console": ConsolePrinter(),
-        "reverse": ReversePrinter()
-    }
+    print_strategies = {"console": ConsolePrinter(), "reverse": ReversePrinter()}
 
-    serializer_strategies = {
-        "json": JsonSerializer(),
-        "xml": XmlSerializer()
-    }
+    serializer_strategies = {"json": JsonSerializer(), "xml": XmlSerializer()}
 
     for cmd, method_type in commands:
         if cmd == "display":
